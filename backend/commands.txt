@@ -1,0 +1,10 @@
+//Create new business
+mutation {
+  createBusiness(input: {name: "Tech Solutions LTDA", city: "São Paulo"}) {
+    id
+    name
+    city
+  }
+}
+
+//
