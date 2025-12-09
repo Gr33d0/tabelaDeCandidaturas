@@ -2,6 +2,8 @@
 import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import { BusinessType } from './types/businessType.js';
 import { BusinessInputType } from './types/businessInputType.js';
+import { VacancyType } from './types/vacancyType.js';
+import { VacancyInputType } from './types/vacancyInputType.js';
 
 export const RootMutationType = new GraphQLObjectType({
     name: 'RootMutationType',
@@ -17,6 +19,15 @@ export const RootMutationType = new GraphQLObjectType({
             resolve: (root, args) => {
                 // O 'root' vem do rootValue do express-graphql (contém o BusinessService)
                 return root.businessService.create(args.input);
+            }
+        },
+        createVacancy: {
+            type: VacancyType, // O tipo de retorno é a Vaga criada
+            args: {
+                input: { type: GraphQLNonNull(VacancyInputType) }
+            },
+            resolve: (root, args) => {
+                return root.vacancyService.create(args.input);
             }
         }
     })

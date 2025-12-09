@@ -8,3 +8,15 @@ mutation {
 }
 
 //
+
+mutation {
+  createVacancy(input: {position: "Front-end Developer", location: "Lisboa",timeOfResponse: "3 meses",link:"https://www.linkedin.com/in/jonas-gomes-pt/"}) {
+      position
+      location
+      timeOfResponse
+      typeOfEmployment
+      link
+   	 	status
+
+  }
+}

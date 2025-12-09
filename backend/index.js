@@ -3,10 +3,12 @@ import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { GraphQLSchema } from 'graphql';
 import { BusinessService } from './modules/business/business.service.js';
+import { VacancyService } from './modules/vacancy/vacancy.service.js';
 import { RootQueryType } from './graphql/RootQueryType.js';
 import { RootMutationType } from './graphql/RootMutationType.js';
 import { connectDB } from './db/database.js'; // 💡 Importar a função
 import dotenv from 'dotenv';
+
 
 dotenv.config();
 const app = express();
@@ -14,6 +16,7 @@ const port = process.env.PORT || 4000; // Usei 4000, pois é a porta comum
 
 // 1. Inicialize a Camada de Serviço
 const businessService = new BusinessService();
+const vacancyService = new VacancyService();
 
 // 2. Crie o Schema principal
 const schema = new GraphQLSchema({
@@ -28,6 +31,7 @@ app.use(
     schema: schema,
     rootValue: {
         businessService: businessService,
+        vacancyService: vacancyService
     },
     graphiql: true,
   })

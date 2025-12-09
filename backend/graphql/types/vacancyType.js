@@ -1,0 +1,32 @@
+// /src/graphql/types/VacancyType.js
+import {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLID,
+  GraphQLNonNull,
+} from "graphql";
+import { BusinessType } from './businessType.js';
+
+export const VacancyType = new GraphQLObjectType({
+  name: "Vacancy",
+  description: "A Vacancy",
+  fields: () => ({
+    id: {
+      type: GraphQLNonNull(GraphQLID),
+      // Resolve o _id do MongoDB para o campo id do GraphQL
+      resolve: (vacancy) => vacancy._id.toString(),
+    },
+    position: { type: GraphQLNonNull(GraphQLString) },
+    location: { type: GraphQLString },
+    timeOfResponse: { type: GraphQLString },
+    typeOfEmployment: { type: GraphQLString },
+    link: { type: GraphQLNonNull(GraphQLString) },
+    status: { type: GraphQLString },
+    business: {
+      type: BusinessType,
+      resolve: (parent, args, { businessService }) => {
+        return businessService.findById(parent.businessId);
+      },
+    },
+  }),
+});

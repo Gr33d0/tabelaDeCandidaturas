@@ -7,5 +7,7 @@ export const BusinessInputType = new GraphQLInputObjectType({
     fields: {
         name: { type: GraphQLNonNull(GraphQLString) },
         city: { type: GraphQLString },
+        vacancyId: { type: GraphQLNonNull(GraphQLString) }
     }
+    
 });
