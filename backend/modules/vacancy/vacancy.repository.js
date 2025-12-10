@@ -23,5 +23,7 @@ export class VacancyRepository {
         return VacancyModel.find(query).exec();
     }
     
-    // ... métodos para update e delete ...
+    static async deleteByBusinessId(businessId) {
+        return VacancyModel.deleteMany({ businessId }).exec();
+    }
 }

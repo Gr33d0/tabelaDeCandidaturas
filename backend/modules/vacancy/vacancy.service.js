@@ -27,5 +27,7 @@ export class VacancyService {
         return VacancyRepository.findAll();
     }
 
+
+
     // ... outros métodos do serviço ...
 }

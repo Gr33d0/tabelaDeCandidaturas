@@ -1,5 +1,5 @@
 // /src/graphql/RootMutationType.js
-import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
+import { GraphQLObjectType, GraphQLNonNull,GraphQLID,GraphQLString} from 'graphql';
 import { BusinessType } from './types/businessType.js';
 import { BusinessInputType } from './types/businessInputType.js';
 import { VacancyType } from './types/vacancyType.js';
@@ -21,6 +21,26 @@ export const RootMutationType = new GraphQLObjectType({
                 return root.businessService.create(args.input);
             }
         },
+        updateBusiness:{
+            type: BusinessType, // O tipo de retorno é a Empresa atualizada
+            args:{
+                id: { type: GraphQLNonNull(GraphQLID) },
+                input: { type: GraphQLNonNull(BusinessInputType) }
+            },
+            resolve: (root, args) => {
+                return root.businessService.update(args.id, args.input);
+            }
+        },
+        deleteBusiness:{
+            type: GraphQLNonNull(GraphQLString), // O tipo de retorno é a Empresa deletada
+            args:{
+                id: { type: GraphQLNonNull(GraphQLID) }
+            },
+            resolve: (root, args) => {
+                return root.businessService.delete(args.id);
+            }
+        },
+
         createVacancy: {
             type: VacancyType, // O tipo de retorno é a Vaga criada
             args: {

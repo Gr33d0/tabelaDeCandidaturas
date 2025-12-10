@@ -22,6 +22,15 @@ export class BusinessRepository {
     static async findByQuery(query) {
         return BusinessModel.find(query).exec();
     }
+    // Metodo para atualizar uma Empresa por ID
+    static async update(id, updateData) {
+        return BusinessModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
+    }
+    // Metodo para deletar uma Empresa por ID
+    static async delete(id) {
+        return BusinessModel.findByIdAndDelete(id).exec();
+    }
+
     
-    // ... métodos para update e delete ...
+
 }
