@@ -37,7 +37,11 @@ const VacancySchema = new mongoose.Schema({
     required: true,
     default: "No response",
   },
-
+  businessId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Business",
+    required: true,
+  },
   // Não incluímos a lista de Vagas aqui, pois usaremos referências.
 });
 

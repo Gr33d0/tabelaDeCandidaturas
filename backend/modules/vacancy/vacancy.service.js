@@ -27,6 +27,21 @@ export class VacancyService {
         return VacancyRepository.findAll();
     }
 
+    async update(id, data) {
+        const updatedVacancy = await VacancyRepository.update(id, data);
+        if (!updatedVacancy) {
+            throw new Error(`Vaga com ID ${id} não encontrada para atualização.`);
+        }
+        return updatedVacancy;
+    }
+
+    async delete(id) {
+        const deletedVacancy = await VacancyRepository.delete(id);
+        if (!deletedVacancy) {
+            throw new Error(`Vaga com ID ${id} não encontrada para exclusão.`);
+        }
+        return `Vacancy deleted`;
+    }
 
 
     // ... outros métodos do serviço ...

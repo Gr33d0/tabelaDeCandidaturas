@@ -26,4 +26,11 @@ export class VacancyRepository {
     static async deleteByBusinessId(businessId) {
         return VacancyModel.deleteMany({ businessId }).exec();
     }
+
+    static async update(id, vacancyData) {
+        return VacancyModel.findByIdAndUpdate(id, vacancyData, { new: true }).exec();
+    }
+    static async delete(id) {
+        return VacancyModel.findByIdAndDelete(id).exec();
+    }
 }

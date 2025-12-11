@@ -39,6 +39,7 @@ describe("Business GraphQL Tests", () => {
     expect(business.city).toBe("Lisboa");
 
     businessId = business.id;
+    expect(businessId).toBeDefined();
   });
 
   test("Update business", async () => {

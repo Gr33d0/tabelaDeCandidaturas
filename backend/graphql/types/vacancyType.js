@@ -18,10 +18,12 @@ export const VacancyType = new GraphQLObjectType({
     },
     position: { type: GraphQLNonNull(GraphQLString) },
     location: { type: GraphQLString },
+    timeOfApplication: { type: GraphQLString },
     timeOfResponse: { type: GraphQLString },
     typeOfEmployment: { type: GraphQLString },
     link: { type: GraphQLNonNull(GraphQLString) },
     status: { type: GraphQLString },
+    businessId: { type: GraphQLID },
     business: {
       type: BusinessType,
       resolve: (parent, args, { businessService }) => {
