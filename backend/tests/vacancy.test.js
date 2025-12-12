@@ -53,7 +53,6 @@ describe("Vacancy GraphQL Tests", () => {
     `;
 
     const res = await request(app).post("/graphql").send({ query: mutation });
-    console.log(res.body);
     const vacancy = res.body.data.createVacancy;
 
     expect(vacancy.position).toBe("Desenvolvedor");

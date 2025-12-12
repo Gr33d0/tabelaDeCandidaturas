@@ -5,6 +5,8 @@ import { app } from "../app.js";
 
 let mongoServer;
 
+
+
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
@@ -33,7 +35,7 @@ describe("Business GraphQL Tests", () => {
 
     const res = await request(app).post("/graphql").send({ query: mutation });
 
-    const business = res.body.data.createBusiness;
+    business = res.body.data.createBusiness;
 
     expect(business.name).toBe("Empresa Teste");
     expect(business.city).toBe("Lisboa");
