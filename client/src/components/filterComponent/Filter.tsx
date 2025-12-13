@@ -1,14 +1,15 @@
+import "./FilterStyle.css";
 export default function Filter() {
   return (
-    <div className="container">
-      Filtro
+    <div className="filter">
       <form action="">
-        <div>
-          <label htmlFor="role">Function:</label>
+        Filtro
+        <div className="form-group">
+          <p>Function</p>
           <input type="text" id="role" name="role" placeholder="Function" />
         </div>
-        <div>
-          <label htmlFor="location">Location:</label>
+        <div className="form-group">
+          <p>Location:</p>
           <input
             type="text"
             id="location"
@@ -16,8 +17,8 @@ export default function Filter() {
             placeholder="Location"
           />
         </div>
-        <div>
-          <label htmlFor="timeOfApplication">Time of Application:</label>
+        <div className="form-group">
+          <p>Time of Application:</p>
           <input
             type="text"
             id="timeOfApplication"
@@ -25,8 +26,8 @@ export default function Filter() {
             placeholder="Time of Application"
           />
         </div>
-        <div>
-          <label htmlFor="timeOfResponse">Time of Response:</label>
+        <div className="form-group">
+          <p>Time of Response:</p>
           <input
             type="text"
             id="timeOfResponse"
@@ -34,8 +35,8 @@ export default function Filter() {
             placeholder="Time of Response"
           />
         </div>
-        <div>
-          <label htmlFor="typeOfEmployment">Type of Employment:</label>
+        <div className="form-group">
+          <p>Type of Employment:</p>
           <input
             type="text"
             id="typeOfEmployment"
@@ -44,7 +45,7 @@ export default function Filter() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="status">Status:</label>
+          <p>Status:</p>
           <select name="status" id="status">
             <option value="all">Todos</option>
             <option value="pending">Pendente</option>
@@ -53,11 +54,7 @@ export default function Filter() {
           </select>
         </div>
         <div className="form-group">
-          <label htmlFor="dateFrom">Data de:</label>
-          <input type="date" id="dateFrom" name="dateFrom" />
-        </div>
-        <div>
-          <label htmlFor="businessName">Business Name:</label>
+          <p>Business Name:</p>
           <input
             type="text"
             id="businessName"
@@ -65,8 +62,8 @@ export default function Filter() {
             placeholder="Business Name"
           />
         </div>
-        <div>
-          <label htmlFor="city">City:</label>
+        <div className="form-group">
+          <p>City:</p>
           <input type="text" id="city" name="city" placeholder="City" />
         </div>
       </form>

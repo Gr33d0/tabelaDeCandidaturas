@@ -27,6 +27,7 @@ export const VacancyType = new GraphQLObjectType({
     business: {
       type: BusinessType,
       resolve: (parent, args, { businessService }) => {
+        if (!parent.businessId) return null;
         return businessService.findById(parent.businessId);
       },
     },

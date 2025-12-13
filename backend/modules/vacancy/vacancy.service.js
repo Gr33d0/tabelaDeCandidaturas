@@ -43,6 +43,9 @@ export class VacancyService {
         return `Vacancy deleted`;
     }
 
+    async findByBusinessId(businessId) {
+        return VacancyRepository.findByBusinessId(businessId);
+    }
 
     // ... outros métodos do serviço ...
 }

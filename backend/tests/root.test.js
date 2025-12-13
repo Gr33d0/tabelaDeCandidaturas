@@ -66,6 +66,7 @@ describe("Root GraphQL Tests", () => {
     const businesses = res.body.data.businesses;
 
     expect(businesses.length).toBeGreaterThan(0);
+    expect(businesses[0].vacancies[0]).not.toBeNull();
   });
     test("Fetch all vacancies", async () => {
     const query = `query {

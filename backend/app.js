@@ -22,12 +22,16 @@ const schema = new GraphQLSchema({
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: schema,
+    schema,
     rootValue: {
       businessService,
-      vacancyService
+      vacancyService,
     },
-    graphiql: false, // Nos testes não precisamos
+    context: {
+      businessService,
+      vacancyService,
+    },
+    graphiql: true,
   })
 );
 
