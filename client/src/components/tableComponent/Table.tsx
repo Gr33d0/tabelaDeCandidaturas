@@ -10,22 +10,30 @@ export default function Table() {
     const getData = async () => {
       try {
         const res = await fetch("http://localhost:3000/graphql", {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             query: `
-              query {
-                businesses {
-                  id
-                  position
-                  location
-                  status
-                }
-              }
-            `
-          })
+      query {
+        vacancies {
+          id
+          position
+          location
+          timeOfApplication
+          timeOfResponse
+          typeOfEmployment
+          link
+          status
+          business {
+            id
+            name
+          }
+        }
+      }
+    `,
+          }),
         });
 
         const data = await res.json();
@@ -33,7 +41,7 @@ export default function Table() {
         if (data.errors) {
           setError(data.errors[0].message);
         } else {
-          setData(data.data.businesses);
+          setData(data.data.vacancies);
         }
       } catch (err) {
         setError("Erro ao buscar dados");
@@ -59,18 +67,21 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {data.map((business: any) => (
-            <tr key={business.id}>
-              <td>{business.position}</td>
-              <td>{business.location}</td>
-              <td>2024-01-15</td>
-              <td>2024-01-20</td>
-              <td>Full-time</td>
-              <td>{business.status}</td>
-            <td>TechCorp</td>
-          </tr>))}
+          {data.map((vacancie: any) => (
+            <tr key={vacancie.id}>
+              <td>{vacancie.position}</td>
+              <td>{vacancie.location}</td>
+              <td>{vacancie.timeOfApplication}</td>
+              <td>{vacancie.timeOfResponse}</td>
+              <td>{vacancie.typeOfEmployment}</td>
+              <td>{vacancie.status}</td>
+              <td>{vacancie.business?.name || "N/A"}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      {loading && <p>Loading...</p>}
+      {error && <p className="error">{error}</p>}
     </div>
   );
 }

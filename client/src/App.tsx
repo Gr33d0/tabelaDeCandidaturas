@@ -2,6 +2,7 @@
 import './App.css'
 import Filter from './components/filterComponent/Filter.tsx'
 import Table from './components/tableComponent/Table.tsx'
+import AddButton from './components/addButtonComponent/AddButton.tsx'
 function App() {
 
 
@@ -11,7 +12,8 @@ function App() {
         <Filter />
       </div>
       <div>
-  <Table/>
+        <AddButton />
+        <Table/>
       </div>
     </div>
   )

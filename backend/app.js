@@ -1,12 +1,20 @@
 import express from 'express';
+import cors from "cors";
 import { graphqlHTTP } from 'express-graphql';
 import { GraphQLSchema } from 'graphql';
+
 import { BusinessService } from './modules/business/business.service.js';
 import { VacancyService } from './modules/vacancy/vacancy.service.js';
 import { RootQueryType } from './graphql/RootQueryType.js';
 import { RootMutationType } from './graphql/RootMutationType.js';
 
 const app = express();
+
+//Cors
+app.use(cors({
+  origin: "http://localhost:5173", // React
+  credentials: true
+}));
 
 // Services
 const businessService = new BusinessService();
