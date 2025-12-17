@@ -7,7 +7,7 @@ type Business = {
   name: string;
 };
 
-export default function AddButton() {
+export default function AddVacancyButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [business, setBusiness] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
