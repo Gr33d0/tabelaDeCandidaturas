@@ -34,6 +34,8 @@ export class VacancyRepository {
   static async delete(id) {
     return VacancyModel.findByIdAndDelete(id).exec();
   }
-
+  static async findByWhere(where = {}) {
+  return VacancyModel.find(where).exec();
+}
 
 }

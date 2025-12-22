@@ -5,13 +5,13 @@ import { app } from "../app.js";
 
 let mongoServer;
 let businessId;
-
+let vacancyId;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
 
-  await mongoose.connect(uri); // 👉 Sem options antigas
-    // Criar business antes dos testes de vacancy
+  await mongoose.connect(uri);
+  // Criar business antes dos testes de vacancy
   const createBusinessMutation = `
     mutation {
       createBusiness(input: { name: "Empresa Vacancy", city: "Faro" }) {
@@ -20,7 +20,13 @@ beforeAll(async () => {
     }
   `;
 
-  const res = await request(app).post("/graphql").send({ query: createBusinessMutation });
+  const res = await request(app)
+    .post("/graphql")
+    .send({ query: createBusinessMutation });
+  expect(res.body.data.createBusiness).toBeDefined();
+  expect(res.body.data.createBusiness.id).toBeDefined();
+  expect(res.body.data.createBusiness.id).not.toBe("");
+
   businessId = res.body.data.createBusiness.id;
 });
 
@@ -30,15 +36,13 @@ afterAll(async () => {
 });
 
 describe("Vacancy GraphQL Tests", () => {
-  let vacancyId;
 
   test("Create a vacancy", async () => {
-
     expect(businessId).toBeDefined();
 
     const mutation = `
-      mutation {
-        createVacancy(input: { position: "Desenvolvedor", location:"Porto",timeOfResponse:"3 Meses",typeOfEmployment:"Hybrid",link:"linkdn", businessId: "${businessId}" }) {
+      mutation createVacancy($input: VacancyCreateInput!){
+        createVacancy(input: $input) {
           id
           position
           location
@@ -52,18 +56,32 @@ describe("Vacancy GraphQL Tests", () => {
       }
     `;
 
-    const res = await request(app).post("/graphql").send({ query: mutation });
-    const vacancy = res.body.data.createVacancy;
+    const variables = {
+      input: {
+        position: "Desenvolvedor",
+        location: "Porto",
+        timeOfResponse: "3 Meses",
+        typeOfEmployment: "Hybrid",
+        link: "linkdn",
+        businessId: businessId, // use o ID criado antes
+      },
+    };
 
-    expect(vacancy.position).toBe("Desenvolvedor");
-    expect(vacancy.location).toBe("Porto");
-    expect(vacancy.timeOfResponse).toBe("3 Meses");
-    expect(vacancy.typeOfEmployment).toBe("Hybrid");
-    expect(vacancy.link).toBe("linkdn");
-    expect(vacancy.status).toBe("No response");
-    expect(vacancy.businessId).toBe(businessId);
+    const res = await request(app)
+      .post("/graphql")
+      .send({ query: mutation, variables });
 
-    vacancyId = vacancy.id;
+    expect(res.body.data.createVacancy).toBeDefined();
+    expect(res.body.data.createVacancy.id).not.toBe("");
+    vacancyId = res.body.data.createVacancy.id
+
+    expect(res.body.data.createVacancy.position).toBe("Desenvolvedor");
+    expect(res.body.data.createVacancy.location).toBe("Porto");
+    expect(res.body.data.createVacancy.timeOfResponse).toBe("3 Meses");
+    expect(res.body.data.createVacancy.typeOfEmployment).toBe("Hybrid");
+    expect(res.body.data.createVacancy.link).toBe("linkdn");
+    expect(res.body.data.createVacancy.status).toBe("No response");
+    expect(res.body.data.createVacancy.businessId).toBe(businessId);
   });
 
   test("Update vacancy", async () => {
@@ -87,16 +105,21 @@ describe("Vacancy GraphQL Tests", () => {
 
     const res = await request(app).post("/graphql").send({ query: mutation });
 
-    expect(res.body.data.updateVacancy.position).toBe("Desenvolvedor Front-end");
+    expect(res.body.data.updateVacancy.position).toBe(
+      "Desenvolvedor Front-end"
+    );
     expect(res.body.data.updateVacancy.location).toBe("Lisbon");
     expect(res.body.data.updateVacancy.timeOfResponse).toBe("2 Meses");
     expect(res.body.data.updateVacancy.typeOfEmployment).toBe("Remote");
     expect(res.body.data.updateVacancy.link).toBe("email");
     expect(res.body.data.updateVacancy.status).toBe("Rejected");
-    
   });
 
-  test("Delete Vacancy", async () => {
+  //Delete precisa de ser o ultimo teste
+    test("Delete Vacancy", async () => {
+    expect(vacancyId).toBeDefined();
+    expect(vacancyId).not.toBe("");
+
     const mutation = `
     mutation {
       deleteVacancy(id: "${vacancyId}")
@@ -104,7 +127,8 @@ describe("Vacancy GraphQL Tests", () => {
   `;
 
     const res = await request(app).post("/graphql").send({ query: mutation });
-
+    expect(res.body.data.deleteVacancy).toBeDefined();
+    expect(res.body.data.deleteVacancy).not.toBe("");
     expect(res.body.data.deleteVacancy).toBe("Vacancy deleted");
   });
 });

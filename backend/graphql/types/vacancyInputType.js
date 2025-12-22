@@ -33,3 +33,15 @@ export const VacancyUpdateInputType = new GraphQLInputObjectType({
         
   },
 });
+
+export const VacancyWhereInput = new GraphQLInputObjectType({
+  name: "VacancyWhereInput",
+  description: "Filters to search vacancies",
+  fields: {
+    position: { type: GraphQLString },
+    location: { type: GraphQLString },
+    typeOfEmployment: { type: GraphQLString },
+    status: { type: GraphQLString },
+    businessId: { type: GraphQLString },
+  }
+});

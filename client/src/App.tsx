@@ -1,24 +1,40 @@
-
 import './App.css'
-import Filter from './components/filterComponent/Filter.tsx'
-import Table from './components/tableComponent/Table.tsx'
-import AddVacancyButton from './components/addVacancyButtonComponent/AddVacancyButton.tsx'
-import AddBusinessButton from './components/addBusinessButtonComponent/AddBusinessButton.tsx'
-function App() {
+import Filter from './components/filterComponent/Filter'
+import Table from './components/tableComponent/Table'
+import AddVacancyButton from './components/addVacancyButtonComponent/AddVacancyButton'
+import AddBusinessButton from './components/addBusinessButtonComponent/AddBusinessButton'
+import { useState } from "react";
 
+function App() {
+  // Estado de filtros
+  const [filters, setFilters] = useState({
+    role: "",
+    location: "",
+    timeOfApplication: "",
+    timeOfResponse: "",
+    typeOfEmployment: "",
+    status: "all",
+    businessName: "",
+    city: "",
+  });
+
+  // Atualiza um filtro específico
+  const handleFilterChange = (field: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <div className='container'>
       <div>
-        <Filter />
+        <Filter filters={filters} onFilterChange={handleFilterChange} />
       </div>
       <div>
         <AddVacancyButton />
         <AddBusinessButton />
-        <Table/>
+        <Table filters={filters} />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

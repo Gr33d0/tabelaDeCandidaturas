@@ -47,5 +47,7 @@ export class VacancyService {
         return VacancyRepository.findByBusinessId(businessId);
     }
 
-    // ... outros métodos do serviço ...
+    async findAll(where = {}) {
+  return VacancyRepository.findByWhere(where);
+}
 }

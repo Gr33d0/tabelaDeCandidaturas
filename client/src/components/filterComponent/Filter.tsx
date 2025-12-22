@@ -1,12 +1,34 @@
 import "./FilterStyle.css";
-export default function Filter() {
+
+type FilterProps = {
+    filters: {
+    role: string;
+    location: string;
+    timeOfApplication: string;
+    timeOfResponse: string;
+    typeOfEmployment: string;
+    status: string;
+    businessName: string;
+    city: string;
+  };
+  onFilterChange: (field: string, value: string) => void;
+};
+
+export default function Filter({ filters, onFilterChange }: FilterProps) {
   return (
     <div className="filter">
       <form action="">
         Filtro
         <div className="form-group">
           <p>Function</p>
-          <input type="text" id="role" name="role" placeholder="Function" />
+          <input
+            type="text"
+            id="role"
+            name="role"
+            value={filters.role}
+            onChange={(e) => onFilterChange("role", e.target.value)}
+            placeholder="Function"
+          />
         </div>
         <div className="form-group">
           <p>Location:</p>
@@ -14,6 +36,8 @@ export default function Filter() {
             type="text"
             id="location"
             name="location"
+            value={filters.location}
+            onChange={(e) => onFilterChange("location", e.target.value)}
             placeholder="Location"
           />
         </div>
@@ -24,6 +48,8 @@ export default function Filter() {
             id="timeOfApplication"
             name="timeOfApplication"
             placeholder="Time of Application"
+            value={filters.timeOfApplication}
+            onChange={(e) => onFilterChange("timeOfApplication", e.target.value)}
           />
         </div>
         <div className="form-group">
@@ -33,20 +59,23 @@ export default function Filter() {
             id="timeOfResponse"
             name="timeOfResponse"
             placeholder="Time of Response"
+            value={filters.timeOfResponse}
+            onChange={(e) => onFilterChange("timeOfResponse", e.target.value)}
           />
         </div>
         <div className="form-group">
           <p>Type of Employment:</p>
-          <input
-            type="text"
-            id="typeOfEmployment"
-            name="typeOfEmployment"
-            placeholder="Type of Employment"
-          />
+          <select name="typeOfEmployment" id="typeOfEmployment" value={filters.typeOfEmployment} onChange={(e) => onFilterChange("typeOfEmployment", e.target.value)}> 
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="presential">Presential</option>
+
+          </select>
+
         </div>
         <div className="form-group">
           <p>Status:</p>
-          <select name="status" id="status">
+          <select name="status" id="status" value={filters.status} onChange={(e) => onFilterChange("status", e.target.value)}>
             <option value="all">Todos</option>
             <option value="pending">Pendente</option>
             <option value="approved">Aprovado</option>
@@ -60,11 +89,14 @@ export default function Filter() {
             id="businessName"
             name="businessName"
             placeholder="Business Name"
+            value={filters.businessName}
+            onChange={(e) => onFilterChange("businessName", e.target.value)}
           />
         </div>
         <div className="form-group">
           <p>City:</p>
-          <input type="text" id="city" name="city" placeholder="City" />
+          <input type="text" id="city" name="city" placeholder="City" value={filters.city}
+            onChange={(e) => onFilterChange("city", e.target.value)} />
         </div>
       </form>
     </div>

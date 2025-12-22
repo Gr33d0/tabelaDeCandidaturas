@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./TableStyle.css";
+import DeleteVacancyButton from "./DeleteVacancyButton";
 
 type Vacancy = {
   id: string;
   position: string;
-  location: string; 
+  location: string;
   timeOfApplication: string;
   timeOfResponse: string;
   typeOfEmployment: string;
@@ -16,7 +17,20 @@ type Vacancy = {
 const STATUS_OPTIONS = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"];
 const EMPLOYMENT_OPTIONS = ["REMOTE", "HYBRID", "PRESENTIAL"];
 
-export default function Table() {
+type TableProps = {
+  filters: {
+    role: string;
+    location: string;
+    timeOfApplication: string;
+    timeOfResponse: string;
+    typeOfEmployment: string;
+    status: string;
+    businessName: string;
+    city: string;
+  };
+};
+
+export default function Table({ filters }: TableProps) {
   const [data, setData] = useState<Vacancy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -177,6 +191,20 @@ export default function Table() {
     }
   };
 
+  // Filtra os dados com base nos filtros recebidos
+  const filteredData = data.filter((v) => {
+    return (
+      (!filters.role || v.position.toLowerCase().includes(filters.role.toLowerCase())) &&
+      (!filters.location || v.location.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (!filters.timeOfApplication || v.timeOfApplication.includes(filters.timeOfApplication)) &&
+      (!filters.timeOfResponse || v.timeOfResponse.includes(filters.timeOfResponse)) &&
+      (!filters.typeOfEmployment || v.typeOfEmployment.toLowerCase().includes(filters.typeOfEmployment.toLowerCase())) &&
+      (filters.status === "all" || v.status.toLowerCase() === filters.status.toLowerCase()) &&
+      (!filters.businessName || v.business?.name.toLowerCase().includes(filters.businessName.toLowerCase())) &&
+      (!filters.city || v.location.toLowerCase().includes(filters.city.toLowerCase()))
+    );
+  });
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error">{error}</p>;
 
@@ -193,21 +221,26 @@ export default function Table() {
             <th>Status</th>
             <th>Link</th>
             <th>Business</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((v) => (
+          {filteredData.map((v) => (
             <tr key={v.id}>
               <td>{renderCell(v, "position", "text")}</td>
               <td>{renderCell(v, "location", "text")}</td>
               <td>{v.timeOfApplication}</td>
               <td>{renderCell(v, "timeOfResponse", "text")}</td>
-              <td>
-                {renderCell(v, "typeOfEmployment", "select", EMPLOYMENT_OPTIONS)}
-              </td>
+              <td>{renderCell(v, "typeOfEmployment", "select", EMPLOYMENT_OPTIONS)}</td>
               <td>{renderCell(v, "status", "select", STATUS_OPTIONS)}</td>
               <td>{renderCell(v, "link", "url")}</td>
               <td>{v.business?.name ?? "-"}</td>
+              <td>
+                <DeleteVacancyButton
+                  vacancyId={v.id}
+                  onDeleted={() => setData((prev) => prev.filter((item) => item.id !== v.id))}
+                />
+              </td>
             </tr>
           ))}
         </tbody>

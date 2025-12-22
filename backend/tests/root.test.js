@@ -123,6 +123,31 @@ describe("Root GraphQL Tests", () => {
     expect(vacancy.id).toBe(vacancyId);
     });
 
+      test("Find vacancies with where args", async () => {
+        const query = `
+        query {
+          vacancies(where: { location: "Porto", status: "No response" }) {
+            id
+            position
+            location
+            status
+            businessId
+          }
+        }
+      `;
+    
+        const res = await request(app).post("/graphql").send({ query });
+    
+        expect(res.body.data.vacancies).toBeDefined();
+        expect(res.body.data.vacancies.length).toBeGreaterThan(0);
+    
+        res.body.data.vacancies.forEach((v) => {
+          expect(v.location).toBe("Porto");
+          expect(v.status).toBe("No response");
+        });
+    
+      });
+
 
 
 });
