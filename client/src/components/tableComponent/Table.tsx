@@ -14,8 +14,8 @@ type Vacancy = {
   business: { id: string; name: string } | null;
 };
 
-const STATUS_OPTIONS = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"];
-const EMPLOYMENT_OPTIONS = ["REMOTE", "HYBRID", "PRESENTIAL"];
+const STATUS_OPTIONS = ["applied", "interview", "approved", "rejected"];
+const EMPLOYMENT_OPTIONS = ["remote", "hybrid", "presential"];
 
 type TableProps = {
   filters: {

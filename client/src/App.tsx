@@ -1,8 +1,8 @@
-import './App.css'
-import Filter from './components/filterComponent/Filter'
-import Table from './components/tableComponent/Table'
-import AddVacancyButton from './components/addVacancyButtonComponent/AddVacancyButton'
-import AddBusinessButton from './components/addBusinessButtonComponent/AddBusinessButton'
+import "./App.css";
+import Filter from "./components/filterComponent/Filter";
+import Table from "./components/tableComponent/Table";
+import AddVacancyButton from "./components/addVacancyButtonComponent/AddVacancyButton";
+import AddBusinessButton from "./components/addBusinessButtonComponent/AddBusinessButton";
 import { useState } from "react";
 
 function App() {
@@ -24,13 +24,16 @@ function App() {
   };
 
   return (
-    <div className='container'>
+    <div className="container">
       <div>
         <Filter filters={filters} onFilterChange={handleFilterChange} />
       </div>
       <div>
-        <AddVacancyButton />
-        <AddBusinessButton />
+        <div className="table-header">
+          <AddVacancyButton />
+          <AddBusinessButton />
+        </div>
+
         <Table filters={filters} />
       </div>
     </div>

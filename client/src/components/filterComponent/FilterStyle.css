@@ -1,13 +1,21 @@
 
 .filter{
     text-align: center;
-    border-radius: 25px;
-    border-color: white;
-    border: 1px solid;
     margin-left: 20px;
+    background-color: white;
+    overflow-y: visible;
+    padding-bottom: 0.1px;
+}
+
+.filter-header h2{
+    margin-top: 0px;
 }
 
 .form-group{
-    margin-bottom: 15px;
     text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group p{
+    border-bottom: 1px solid rgb(207, 207, 207);
 }

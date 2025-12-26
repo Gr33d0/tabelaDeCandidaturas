@@ -3,7 +3,26 @@
   display: grid;
   grid-template-columns: 1fr 3fr; 
   gap: 20px;
-  height: 100vh;
   width: 100vw;
   
+}
+
+.table-header{
+  background-color: white;
+  margin-bottom: 10px;
+display: flex;
+  align-items: center;   /* centra verticalmente */
+  gap: 10px;             /* espaço entre botões */
+  padding: 10px 20px;    /* espaço interno */
+  height: 60px;          /* controla a altura */
+}
+
+.table-header button{
+  background-color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px;
+}
+.table-header button:hover{
+  background-color: rgb(219, 219, 219);
 }

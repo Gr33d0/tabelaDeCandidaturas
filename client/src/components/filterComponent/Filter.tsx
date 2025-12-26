@@ -17,8 +17,9 @@ type FilterProps = {
 export default function Filter({ filters, onFilterChange }: FilterProps) {
   return (
     <div className="filter">
+      <div className="filter-header"><h2>Filter</h2></div>
       <form action="">
-        Filtro
+        
         <div className="form-group">
           <p>Function</p>
           <input
@@ -66,6 +67,7 @@ export default function Filter({ filters, onFilterChange }: FilterProps) {
         <div className="form-group">
           <p>Type of Employment:</p>
           <select name="typeOfEmployment" id="typeOfEmployment" value={filters.typeOfEmployment} onChange={(e) => onFilterChange("typeOfEmployment", e.target.value)}> 
+            <option value="">Todos</option>
             <option value="remote">Remote</option>
             <option value="hybrid">Hybrid</option>
             <option value="presential">Presential</option>
@@ -77,9 +79,10 @@ export default function Filter({ filters, onFilterChange }: FilterProps) {
           <p>Status:</p>
           <select name="status" id="status" value={filters.status} onChange={(e) => onFilterChange("status", e.target.value)}>
             <option value="all">Todos</option>
-            <option value="pending">Pendente</option>
-            <option value="approved">Aprovado</option>
-            <option value="rejected">Rejeitado</option>
+            <option value="applied">Applied</option>
+            <option value="interview">Interview</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
           </select>
         </div>
         <div className="form-group">
