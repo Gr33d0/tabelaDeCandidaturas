@@ -1,21 +1,87 @@
-
-.filter{
-    text-align: center;
-    margin-left: 20px;
-    background-color: white;
-    overflow-y: visible;
-    padding-bottom: 0.1px;
+/* Container principal */
+.filter {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.filter-header h2{
-    margin-top: 0px;
+/* Header */
+.filter-header {
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-.form-group{
-    text-align: center;
-    margin-bottom: 20px;
+.filter-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
 }
 
-.form-group p{
-    border-bottom: 1px solid rgb(207, 207, 207);
+/* Form */
+.filter form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Grupo */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+/* Label */
+.form-group p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  border: none;
+}
+
+/* Inputs e Selects */
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+}
+
+/* Focus */
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4f6ef7;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+/* Hover */
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #bbb;
+}
+
+/* Select arrow fix */
+.form-group select {
+  cursor: pointer;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .filter {
+    padding: 16px;
+  }
+
+  .filter-header h2 {
+    font-size: 18px;
+  }
 }

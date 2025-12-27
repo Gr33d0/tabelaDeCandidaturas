@@ -37,7 +37,10 @@ export default function Table({ filters }: TableProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<keyof Vacancy | null>(null);
 
-  // Fetch vacancies
+  // State de ordenação
+  const [sortField, setSortField] = useState<keyof Vacancy | "business">("position");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const getData = async () => {
     try {
       const res = await fetch("http://localhost:3000/graphql", {
@@ -79,14 +82,12 @@ export default function Table({ filters }: TableProps) {
     getData();
   }, []);
 
-  // Atualiza o estado local
   const updateField = (id: string, field: keyof Vacancy, value: string) => {
     setData((prev) =>
       prev.map((v) => (v.id === id ? { ...v, [field]: value } : v))
     );
   };
 
-  // Salva vacancy no backend
   const saveVacancy = async (vacancy: Vacancy) => {
     const input = {
       position: vacancy.position,
@@ -125,14 +126,12 @@ export default function Table({ filters }: TableProps) {
     }
   };
 
-  // Renderiza valor seguro para TS (string ou objeto)
   const renderValue = (value: string | { id: string; name: string } | null) => {
     if (typeof value === "string") return value;
     if (value && "name" in value) return value.name;
     return "-";
   };
 
-  // Render cell click-to-edit
   const renderCell = (
     vacancy: Vacancy,
     field: keyof Vacancy,
@@ -191,7 +190,7 @@ export default function Table({ filters }: TableProps) {
     }
   };
 
-  // Filtra os dados com base nos filtros recebidos
+  // Filtra dados
   const filteredData = data.filter((v) => {
     return (
       (!filters.role || v.position.toLowerCase().includes(filters.role.toLowerCase())) &&
@@ -205,27 +204,65 @@ export default function Table({ filters }: TableProps) {
     );
   });
 
+  // Ordena dados
+  const sortedData = [...filteredData].sort((a, b) => {
+    let aValue: string = "";
+    let bValue: string = "";
+
+    if (sortField === "business") {
+      aValue = a.business?.name ?? "";
+      bValue = b.business?.name ?? "";
+    } else {
+      aValue = (a[sortField] as string) ?? "";
+      bValue = (b[sortField] as string) ?? "";
+    }
+
+    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+  });
+
+  const handleSort = (field: keyof Vacancy | "business") => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="table-container">
       <table>
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Location</th>
-            <th>Applied At</th>
-            <th>Response At</th>
-            <th>Employment Type</th>
-            <th>Status</th>
-            <th>Link</th>
-            <th>Business</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
+<thead>
+  <tr>
+    {[
+      { label: "Position", field: "position" },
+      { label: "Location", field: "location" },
+      { label: "Applied At", field: "timeOfApplication" },
+      { label: "Response At", field: "timeOfResponse" },
+      { label: "Employment Type", field: "typeOfEmployment" },
+      { label: "Status", field: "status" },
+      { label: "Link", field: "link" },
+      { label: "Business", field: "business" },
+    ].map((col) => (
+      <th
+        key={col.field}
+        onClick={() => handleSort(col.field as keyof Vacancy | "business")}
+        style={{ cursor: "pointer", userSelect: "none" }}
+      >
+        {col.label}{" "}
+        {sortField === col.field && (
+          <span>{sortOrder === "asc" ? "↑" : "↓"}</span>
+        )}
+      </th>
+    ))}
+    <th>Delete</th>
+  </tr>
+</thead>
         <tbody>
-          {filteredData.map((v) => (
+          {sortedData.map((v) => (
             <tr key={v.id}>
               <td>{renderCell(v, "position", "text")}</td>
               <td>{renderCell(v, "location", "text")}</td>

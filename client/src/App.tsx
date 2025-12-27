@@ -25,10 +25,11 @@ function App() {
 
   return (
     <div className="container">
-      <div>
+
+      <div className="left-side">
         <Filter filters={filters} onFilterChange={handleFilterChange} />
       </div>
-      <div>
+      <div className="right-side ">
         <div className="table-header">
           <AddVacancyButton />
           <AddBusinessButton />

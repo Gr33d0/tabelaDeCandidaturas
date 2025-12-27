@@ -1,3 +1,68 @@
-table, th, td {
-  border: 1px solid green;
+/* Container opcional */
+.table-container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+/* Tabela */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Cabeçalho */
+thead {
+  background-color: #f4f6f8;
+}
+
+thead th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* Corpo */
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* Linhas alternadas */
+tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Hover */
+tbody tr:hover {
+  background-color: #f0f4ff;
+  transition: background-color 0.2s ease;
+}
+
+/* Bordas arredondadas */
+table thead tr th:first-child {
+  border-top-left-radius: 10px;
+}
+
+table thead tr th:last-child {
+  border-top-right-radius: 10px;
+}
+
+/* Responsivo (opcional) */
+@media (max-width: 768px) {
+  table {
+    font-size: 13px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 12px;
+  }
 }
