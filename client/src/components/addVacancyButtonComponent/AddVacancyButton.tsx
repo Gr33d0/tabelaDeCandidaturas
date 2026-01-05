@@ -17,7 +17,7 @@ export default function AddVacancyButton() {
     position: "",
     location: "",
     timeOfApplication: "",
-    timeOfResponse: "",
+    timeOfResponse: 0,
     typeOfEmployment: "",
     link: "",
     businessId: "",
@@ -68,7 +68,7 @@ export default function AddVacancyButton() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "timeOfResponse" ? Number(value) : value,
     }));
   };
 
@@ -126,7 +126,7 @@ export default function AddVacancyButton() {
         position: "",
         location: "",
         timeOfApplication: "",
-        timeOfResponse: "",
+        timeOfResponse: 0,
         typeOfEmployment: "",
         link: "",
         businessId: "",
@@ -189,9 +189,9 @@ export default function AddVacancyButton() {
                 </div>
 
                 <div className="form-group">
-                  <p>Time of Response</p>
+                  <p>Time of Response in Months</p>
                   <input
-                    type="text"
+                    type="number"
                     name="timeOfResponse"
                     value={formData.timeOfResponse}
                     onChange={handleChange}

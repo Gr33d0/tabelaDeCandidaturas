@@ -7,7 +7,7 @@ type Vacancy = {
   position: string;
   location: string;
   timeOfApplication: string;
-  timeOfResponse: string;
+  timeOfResponse: number;
   typeOfEmployment: string;
   link: string;
   status: string;
@@ -22,7 +22,7 @@ type TableProps = {
     role: string;
     location: string;
     timeOfApplication: string;
-    timeOfResponse: string;
+    timeOfResponse: number;
     typeOfEmployment: string;
     status: string;
     businessName: string;
@@ -38,9 +38,22 @@ export default function Table({ filters }: TableProps) {
   const [editingField, setEditingField] = useState<keyof Vacancy | null>(null);
 
   // State de ordenação
-  const [sortField, setSortField] = useState<keyof Vacancy | "business">("position");
+  const [sortField, setSortField] = useState<keyof Vacancy | "business">(
+    "position"
+  );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
+  const formatDate = (timestamp: string | number) => {
+    const date = new Date(Number(timestamp));
+
+    if (isNaN(date.getTime())) return "-";
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
   const getData = async () => {
     try {
       const res = await fetch("http://localhost:3000/graphql", {
@@ -82,7 +95,11 @@ export default function Table({ filters }: TableProps) {
     getData();
   }, []);
 
-  const updateField = (id: string, field: keyof Vacancy, value: string) => {
+  const updateField = (
+    id: string,
+    field: keyof Vacancy,
+    value: string | number
+  ) => {
     setData((prev) =>
       prev.map((v) => (v.id === id ? { ...v, [field]: value } : v))
     );
@@ -110,7 +127,7 @@ export default function Table({ filters }: TableProps) {
                 position: "${input.position}",
                 location: "${input.location}",
                 timeOfApplication: "${input.timeOfApplication}",
-                timeOfResponse: "${input.timeOfResponse}",
+                timeOfResponse: ${input.timeOfResponse},
                 typeOfEmployment: "${input.typeOfEmployment}",
                 link: "${input.link}",
                 status: "${input.status}"
@@ -126,8 +143,10 @@ export default function Table({ filters }: TableProps) {
     }
   };
 
-  const renderValue = (value: string | { id: string; name: string } | null) => {
-    if (typeof value === "string") return value;
+  const renderValue = (
+    value: string | number | { id: string; name: string } | null
+  ) => {
+    if (typeof value === "string" || typeof value === "number") return value;
     if (value && "name" in value) return value.name;
     return "-";
   };
@@ -143,7 +162,15 @@ export default function Table({ filters }: TableProps) {
         return (
           <select
             value={vacancy[field] as string}
-            onChange={(e) => updateField(vacancy.id, field, e.target.value)}
+            onChange={(e) =>
+              updateField(
+                vacancy.id,
+                field,
+                field === "timeOfResponse"
+                  ? Number(e.target.value)
+                  : e.target.value
+              )
+            }
             onBlur={() => {
               setEditingId(null);
               setEditingField(null);
@@ -193,14 +220,26 @@ export default function Table({ filters }: TableProps) {
   // Filtra dados
   const filteredData = data.filter((v) => {
     return (
-      (!filters.role || v.position.toLowerCase().includes(filters.role.toLowerCase())) &&
-      (!filters.location || v.location.toLowerCase().includes(filters.location.toLowerCase())) &&
-      (!filters.timeOfApplication || v.timeOfApplication.includes(filters.timeOfApplication)) &&
-      (!filters.timeOfResponse || v.timeOfResponse.includes(filters.timeOfResponse)) &&
-      (!filters.typeOfEmployment || v.typeOfEmployment.toLowerCase().includes(filters.typeOfEmployment.toLowerCase())) &&
-      (filters.status === "all" || v.status.toLowerCase() === filters.status.toLowerCase()) &&
-      (!filters.businessName || v.business?.name.toLowerCase().includes(filters.businessName.toLowerCase())) &&
-      (!filters.city || v.location.toLowerCase().includes(filters.city.toLowerCase()))
+      (!filters.role ||
+        v.position.toLowerCase().includes(filters.role.toLowerCase())) &&
+      (!filters.location ||
+        v.location.toLowerCase().includes(filters.location.toLowerCase())) &&
+      (!filters.timeOfApplication ||
+        v.timeOfApplication.includes(filters.timeOfApplication)) &&
+      (!filters.timeOfResponse ||
+        v.timeOfResponse === filters.timeOfResponse) &&
+      (!filters.typeOfEmployment ||
+        v.typeOfEmployment
+          .toLowerCase()
+          .includes(filters.typeOfEmployment.toLowerCase())) &&
+      (filters.status === "all" ||
+        v.status.toLowerCase() === filters.status.toLowerCase()) &&
+      (!filters.businessName ||
+        v.business?.name
+          .toLowerCase()
+          .includes(filters.businessName.toLowerCase())) &&
+      (!filters.city ||
+        v.location.toLowerCase().includes(filters.city.toLowerCase()))
     );
   });
 
@@ -217,7 +256,9 @@ export default function Table({ filters }: TableProps) {
       bValue = (b[sortField] as string) ?? "";
     }
 
-    return sortOrder === "asc" ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    return sortOrder === "asc"
+      ? aValue.localeCompare(bValue)
+      : bValue.localeCompare(aValue);
   });
 
   const handleSort = (field: keyof Vacancy | "business") => {
@@ -235,47 +276,58 @@ export default function Table({ filters }: TableProps) {
   return (
     <div className="table-container">
       <table>
-<thead>
-  <tr>
-    {[
-      { label: "Position", field: "position" },
-      { label: "Location", field: "location" },
-      { label: "Applied At", field: "timeOfApplication" },
-      { label: "Response At", field: "timeOfResponse" },
-      { label: "Employment Type", field: "typeOfEmployment" },
-      { label: "Status", field: "status" },
-      { label: "Link", field: "link" },
-      { label: "Business", field: "business" },
-    ].map((col) => (
-      <th
-        key={col.field}
-        onClick={() => handleSort(col.field as keyof Vacancy | "business")}
-        style={{ cursor: "pointer", userSelect: "none" }}
-      >
-        {col.label}{" "}
-        {sortField === col.field && (
-          <span>{sortOrder === "asc" ? "↑" : "↓"}</span>
-        )}
-      </th>
-    ))}
-    <th>Delete</th>
-  </tr>
-</thead>
+        <thead>
+          <tr>
+            {[
+              { label: "Position", field: "position" },
+              { label: "Location", field: "location" },
+              { label: "Applied At", field: "timeOfApplication" },
+              { label: "Response At", field: "timeOfResponse" },
+              { label: "Employment Type", field: "typeOfEmployment" },
+              { label: "Status", field: "status" },
+              { label: "Link", field: "link" },
+              { label: "Business", field: "business" },
+            ].map((col) => (
+              <th
+                key={col.field}
+                onClick={() =>
+                  handleSort(col.field as keyof Vacancy | "business")
+                }
+                style={{ cursor: "pointer", userSelect: "none" }}
+              >
+                {col.label}{" "}
+                {sortField === col.field && (
+                  <span>{sortOrder === "asc" ? "↑" : "↓"}</span>
+                )}
+              </th>
+            ))}
+            <th>Delete</th>
+          </tr>
+        </thead>
         <tbody>
           {sortedData.map((v) => (
             <tr key={v.id}>
               <td>{renderCell(v, "position", "text")}</td>
               <td>{renderCell(v, "location", "text")}</td>
-              <td>{v.timeOfApplication}</td>
-              <td>{renderCell(v, "timeOfResponse", "text")}</td>
-              <td>{renderCell(v, "typeOfEmployment", "select", EMPLOYMENT_OPTIONS)}</td>
+              <td>{formatDate(v.timeOfApplication)}</td>
+              <td>{renderCell(v, "timeOfResponse", "text")} Months</td>
+              <td>
+                {renderCell(
+                  v,
+                  "typeOfEmployment",
+                  "select",
+                  EMPLOYMENT_OPTIONS
+                )}
+              </td>
               <td>{renderCell(v, "status", "select", STATUS_OPTIONS)}</td>
               <td>{renderCell(v, "link", "url")}</td>
               <td>{v.business?.name ?? "-"}</td>
               <td>
                 <DeleteVacancyButton
                   vacancyId={v.id}
-                  onDeleted={() => setData((prev) => prev.filter((item) => item.id !== v.id))}
+                  onDeleted={() =>
+                    setData((prev) => prev.filter((item) => item.id !== v.id))
+                  }
                 />
               </td>
             </tr>

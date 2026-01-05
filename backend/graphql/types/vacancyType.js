@@ -4,6 +4,7 @@ import {
   GraphQLString,
   GraphQLID,
   GraphQLNonNull,
+  GraphQLInt,
 } from "graphql";
 import { BusinessType } from './businessType.js';
 
@@ -19,7 +20,7 @@ export const VacancyType = new GraphQLObjectType({
     position: { type: GraphQLNonNull(GraphQLString) },
     location: { type: GraphQLString },
     timeOfApplication: { type: GraphQLString },
-    timeOfResponse: { type: GraphQLString },
+    timeOfResponse: { type: GraphQLInt },
     typeOfEmployment: { type: GraphQLString },
     link: { type: GraphQLNonNull(GraphQLString) },
     status: { type: GraphQLString },

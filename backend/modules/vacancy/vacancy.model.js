@@ -20,7 +20,7 @@ const VacancySchema = new mongoose.Schema({
   },
   // tempo de resposta
   timeOfResponse: {
-    type: String,
+    type: Number,
     required: true,
   },
   // contato da vaga
@@ -35,7 +35,7 @@ const VacancySchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    default: "No response",
+    default: "applied",
   },
   businessId: {
     type: mongoose.Schema.Types.ObjectId,

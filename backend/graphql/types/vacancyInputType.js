@@ -1,5 +1,5 @@
 // /src/graphql/types/VacancyInputType.js
-import { GraphQLInputObjectType, GraphQLString, GraphQLNonNull } from "graphql";
+import { GraphQLInputObjectType, GraphQLString, GraphQLNonNull  ,GraphQLInt } from "graphql";
 
 export const VacancyCreateInputType = new GraphQLInputObjectType({
   name: "VacancyCreateInput",
@@ -9,7 +9,7 @@ export const VacancyCreateInputType = new GraphQLInputObjectType({
     location: { type: GraphQLNonNull(GraphQLString) },
     //Time of application é definido automaticamente no backend
     timeOfApplication: { type: GraphQLString },
-    timeOfResponse: { type: GraphQLNonNull(GraphQLString) },
+    timeOfResponse: { type: GraphQLNonNull(GraphQLInt) },
     typeOfEmployment: { type: GraphQLNonNull(GraphQLString) },
     link: { type: GraphQLNonNull(GraphQLString) },
     status: { type: GraphQLString },
@@ -25,7 +25,7 @@ export const VacancyUpdateInputType = new GraphQLInputObjectType({
     position: { type: GraphQLNonNull(GraphQLString) },
     location: { type: GraphQLString },
     timeOfApplication: { type: GraphQLString },
-    timeOfResponse: { type: GraphQLString },
+    timeOfResponse: { type: GraphQLInt },
     typeOfEmployment: { type: GraphQLString },
     link: { type: GraphQLString },
     status: { type: GraphQLString },
